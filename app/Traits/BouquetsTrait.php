@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Http;
@@ -14,12 +15,9 @@ trait BouquetsTrait
         $this->uri = '/bouquets/';
     }
 
-    public function getBouquets($id = null)
+    public function getBouquets($id = '')
     {
-        if ($id != null) {
-            $getUri = $this->uri . $id;
-        }
-        return $data = Http::get($this->url . $getUri)->json();
+        return Http::get($this->url . $this->uri . $id)->json();
     }
 
     public function deleteBouquet($id)

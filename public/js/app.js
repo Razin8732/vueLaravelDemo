@@ -7607,17 +7607,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  components: {
-    Link: Link
-  },
+  components: {},
   layout: _App__WEBPACK_IMPORTED_MODULE_0__["default"],
   name: 'Bouquets',
   props: {
-    bouquets: Object
+    bouquets: Object | Array
   },
   data: function data() {
     return {
@@ -52165,72 +52168,79 @@ var render = function () {
         _c(
           "div",
           { staticClass: "row justify-content-center" },
-          _vm._l(this.bouquets, function (bouquet) {
-            return _c(
-              "div",
-              { key: bouquet.index, staticClass: "col-md-4 p-3" },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass: "border text-center rounded bouquets p-3",
-                    on: {
-                      mouseenter: _vm.addClass,
-                      mouseleave: _vm.removeClass,
-                    },
-                  },
-                  [
-                    _c("div", { staticClass: "border-bottom mb-2 pb-2" }, [
-                      _c("img", {
-                        staticClass: "w-75 img-fluid",
-                        attrs: { src: bouquet.image },
-                      }),
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "text-start",
-                        staticStyle: { "z-index": "3", position: "relative" },
+          [
+            this.bouquets.length == 0
+              ? _c("div", { staticClass: "col-md-12 p-3" }, [_vm._m(0)])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm._l(this.bouquets, function (bouquet) {
+              return _c(
+                "div",
+                { key: bouquet.index, staticClass: "col-md-4 p-3" },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "border text-center rounded bouquets p-3",
+                      on: {
+                        mouseenter: _vm.addClass,
+                        mouseleave: _vm.removeClass,
                       },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "stretched-link text-decoration-none",
-                            attrs: { href: "#" },
-                            on: {
-                              click: function ($event) {
-                                $event.preventDefault()
-                                return _vm.viewBouquet(bouquet.id)
+                    },
+                    [
+                      _c("div", { staticClass: "border-bottom mb-2 pb-2" }, [
+                        _c("img", {
+                          staticClass: "w-75 img-fluid",
+                          attrs: { src: bouquet.image },
+                        }),
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "text-start",
+                          staticStyle: { "z-index": "3", position: "relative" },
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "stretched-link text-decoration-none",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.viewBouquet(bouquet.id)
+                                },
                               },
                             },
-                          },
-                          [
-                            _c("h3", { staticClass: "text-truncate" }, [
-                              _vm._v(_vm._s(bouquet.name)),
-                            ]),
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "fs-4 fw-normal" }, [
-                          _vm._v(
-                            "\n                " +
-                              _vm._s(bouquet.price.split(".")[0]) +
-                              "\n                "
+                            [
+                              _c("h3", { staticClass: "text-truncate" }, [
+                                _vm._v(_vm._s(bouquet.name)),
+                              ]),
+                            ]
                           ),
-                          _c("sup", [
-                            _vm._v(_vm._s(bouquet.price.split(".")[1])),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "fs-4 fw-normal" }, [
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(bouquet.price.split(".")[0]) +
+                                "\n                "
+                            ),
+                            _c("sup", [
+                              _vm._v(_vm._s(bouquet.price.split(".")[1])),
+                            ]),
                           ]),
-                        ]),
-                      ]
-                    ),
-                  ]
-                ),
-              ]
-            )
-          }),
-          0
+                        ]
+                      ),
+                    ]
+                  ),
+                ]
+              )
+            }),
+          ],
+          2
         ),
       ]),
     ]),
@@ -52333,7 +52343,16 @@ var render = function () {
     ),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "alert alert-info text-center" }, [
+      _c("h4", [_vm._v("No Records Found")]),
+    ])
+  },
+]
 render._withStripped = true
 
 

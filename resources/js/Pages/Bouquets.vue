@@ -3,6 +3,11 @@
     <div class="row mt-3">
       <div class="col-md-12">
         <div class="row justify-content-center">
+          <div class="col-md-12 p-3" v-if="this.bouquets.length == 0">
+            <div class="alert alert-info text-center">
+              <h4>No Records Found</h4>
+            </div>
+          </div>
           <div
             class="col-md-4 p-3"
             v-for="bouquet in this.bouquets"
@@ -100,13 +105,11 @@ import Layout from './App'
 import { Inertia } from '@inertiajs/inertia'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 export default {
-  components: {
-    Link,
-  },
+  components: {},
   layout: Layout,
   name: 'Bouquets',
   props: {
-    bouquets: Object,
+    bouquets: Object | Array,
   },
   data() {
     return {
