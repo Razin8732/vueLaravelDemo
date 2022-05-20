@@ -7780,6 +7780,63 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7794,24 +7851,34 @@ __webpack_require__.r(__webpack_exports__);
         total: 0
       },
       products: [{
-        id: 18,
-        name: 'Familial Love: White Lilies and Gerberas',
+        id: 1,
+        name: 'White Lilies (Product A)',
         price: 10,
         image: 'https://d1mxm3s28igxxe.cloudfront.net/480x480/5cdd463408a93217111334.png'
       }, {
-        id: 19,
-        name: 'Natural Poetry: Lilies and Roses',
+        id: 2,
+        name: 'Lilies and Roses (Product B)',
         price: 8,
         image: 'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d84d413616d7421246578.png'
       }, {
-        id: 20,
-        name: 'Sincere Smile: Pink Roses and Gerberas',
+        id: 3,
+        name: 'Pink Roses (Product C)',
         price: 12,
         image: 'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d88ba27a40fa820506277.png'
       }]
     };
   },
   name: 'Home',
+  mounted: function mounted() {
+    var storageCart = JSON.parse(localStorage.getItem('cart'));
+
+    if (storageCart !== null) {
+      this.cart = storageCart;
+    }
+  },
+  updated: function updated() {
+    window.addEventListener('beforeunload', this.updateLocalStorage);
+  },
   methods: {
     addClass: function addClass(e) {
       if (!e.target.classList.contains('shadow')) {
@@ -7824,7 +7891,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addToCart: function addToCart(product) {
-      console.log('id before:' + this.cart);
       var valObj = this.cart.products.find(function (elem, index) {
         return elem.product.id == product.id;
       });
@@ -7839,7 +7905,8 @@ __webpack_require__.r(__webpack_exports__);
         this.cart.products[indexOfId].quantity++;
       }
 
-      console.log(this.cart.products);
+      this.cart.total += product.price;
+      this.updateLocalStorage();
     },
     removeFromCart: function removeFromCart(productId) {
       var valObj = this.cart.products.find(function (elem, index) {
@@ -7850,12 +7917,33 @@ __webpack_require__.r(__webpack_exports__);
         return;
       } else {
         var indexOfId = this.cart.products.indexOf(valObj);
-        this.cart.products.splice(indexOfId, 1); // if (this.cart.products[indexOfId].quantity > 1) {
-        //   this.cart.products[indexOfId].quantity--
-        // } else {
-        //   this.cart.products.splice(indexOfId, 1)
-        // }
+        this.cart.products.splice(indexOfId, 1);
+        this.cart.total -= valObj.product.price * valObj.quantity;
       }
+
+      this.updateLocalStorage();
+    },
+    removeFromCartQuantity: function removeFromCartQuantity(productId) {
+      var valObj = this.cart.products.find(function (elem, index) {
+        return elem.product.id == productId;
+      });
+
+      if (valObj != undefined) {
+        var indexOfId = this.cart.products.indexOf(valObj);
+
+        if (this.cart.products[indexOfId].quantity > 1) {
+          this.cart.products[indexOfId].quantity--;
+        } else {
+          this.cart.products.splice(indexOfId, 1);
+        }
+
+        this.cart.total -= valObj.product.price;
+      }
+
+      this.updateLocalStorage();
+    },
+    updateLocalStorage: function updateLocalStorage() {
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     }
   }
 });
@@ -52566,7 +52654,7 @@ var render = function () {
           [
             _c("h1", [_vm._v("Cart")]),
             _vm._v(" "),
-            _c("table", { staticClass: "table table-primary" }, [
+            _c("table", { staticClass: "table table-striped" }, [
               _vm._m(0),
               _vm._v(" "),
               _c(
@@ -52595,15 +52683,45 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", { staticStyle: { width: "10%" } }, [
-                      _c("div", [
-                        _c("button", {
-                          staticClass: "btn btn-primary btn-sm rounded",
-                        }),
-                        _vm._v(" "),
-                        _c("span", { staticClass: "fs-4 fw-normal" }, [
-                          _vm._v(_vm._s(item.quantity)),
-                        ]),
-                      ]),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "d-flex flex-row justify-content-around",
+                        },
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary btn-sm rounded",
+                              on: {
+                                click: function ($event) {
+                                  return _vm.addToCart(item.product)
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "fa fa-plus" })]
+                          ),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "fs-4 fw-normal" }, [
+                            _vm._v(_vm._s(item.quantity)),
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger btn-sm rounded",
+                              on: {
+                                click: function ($event) {
+                                  return _vm.removeFromCartQuantity(
+                                    item.product.id
+                                  )
+                                },
+                              },
+                            },
+                            [_c("i", { staticClass: "fa fa-minus" })]
+                          ),
+                        ]
+                      ),
                     ]),
                     _vm._v(" "),
                     _c("td", { staticStyle: { width: "10%" } }, [
@@ -52624,6 +52742,14 @@ var render = function () {
                 }),
                 0
               ),
+              _vm._v(" "),
+              _c("tfoot", [
+                _vm._m(1),
+                _vm._v(" "),
+                _c("td", { attrs: { colspan: "2" } }, [
+                  _c("h3", [_vm._v("Total €" + _vm._s(this.cart.total))]),
+                ]),
+              ]),
             ]),
           ]
         )
@@ -52644,7 +52770,73 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Quantity")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Add or Remove")]),
+      _c("th", [_vm._v("Remove All")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { staticClass: "p-3", attrs: { colspan: "3" } }, [
+      _c("span", { staticClass: "fs-5 fw-bold" }, [_vm._v("Apply Voucher")]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table w-50" }, [
+        _c("tbody", [
+          _c("tr", [
+            _c("td", { staticClass: "d-flex flex-column" }, [
+              _c("span", { staticClass: "fs-5" }, [_vm._v("Voucher 1")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "fs-6" }, [
+                _vm._v(
+                  "\n                    10% off discount voucher for the second unit applying only\n                    to Product A\n                  "
+                ),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("button", { staticClass: "btn btn-primary btn-sm" }, [
+                _vm._v("Apply"),
+              ]),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td", { staticClass: "d-flex flex-column" }, [
+              _c("span", { staticClass: "fs-5" }, [_vm._v("Voucher 2")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "fs-6" }, [
+                _vm._v(
+                  "\n                    5€ off discount on product type B\n                  "
+                ),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("button", { staticClass: "btn btn-primary btn-sm" }, [
+                _vm._v("Apply"),
+              ]),
+            ]),
+          ]),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td", { staticClass: "d-flex flex-column" }, [
+              _c("span", { staticClass: "fs-5" }, [_vm._v("Voucher 3")]),
+              _vm._v(" "),
+              _c("span", { staticClass: "fs-6" }, [
+                _vm._v(
+                  "\n                    5% discount on a cart value over 40€\n                  "
+                ),
+              ]),
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _c("button", { staticClass: "btn btn-primary btn-sm" }, [
+                _vm._v("Apply"),
+              ]),
+            ]),
+          ]),
+        ]),
+      ]),
     ])
   },
 ]

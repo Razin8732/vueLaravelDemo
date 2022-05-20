@@ -35,13 +35,13 @@
       v-if="this.cart.products.length > 0"
     >
       <h1>Cart</h1>
-      <table class="table table-primary">
+      <table class="table table-striped">
         <thead>
           <th>Item</th>
           <th>Price</th>
           <th>Total</th>
           <th>Quantity</th>
-          <th>Add or Remove</th>
+          <th>Remove All</th>
         </thead>
         <tbody>
           <tr v-for="item in this.cart.products" :key="item.id">
@@ -57,9 +57,20 @@
               </span>
             </td>
             <td class="" style="width: 10%;">
-              <div>
-                <button class="btn btn-primary btn-sm rounded"></button>
+              <div class="d-flex flex-row justify-content-around">
+                <button
+                  class="btn btn-primary btn-sm rounded"
+                  @click="addToCart(item.product)"
+                >
+                  <i class="fa fa-plus"></i>
+                </button>
                 <span class="fs-4 fw-normal">{{ item.quantity }}</span>
+                <button
+                  class="btn btn-danger btn-sm rounded"
+                  @click="removeFromCartQuantity(item.product.id)"
+                >
+                  <i class="fa fa-minus"></i>
+                </button>
               </div>
             </td>
             <td class="" style="width: 10%;">
@@ -72,6 +83,52 @@
             </td>
           </tr>
         </tbody>
+        <tfoot>
+          <td colspan="3" class="p-3">
+            <span class="fs-5 fw-bold">Apply Voucher</span>
+            <table class="table w-50">
+              <tbody>
+                <tr>
+                  <td class="d-flex flex-column">
+                    <span class="fs-5">Voucher 1</span>
+                    <span class="fs-6">
+                      10% off discount voucher for the second unit applying only
+                      to Product A
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm">Apply</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="d-flex flex-column">
+                    <span class="fs-5">Voucher 2</span>
+                    <span class="fs-6">
+                      5€ off discount on product type B
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm">Apply</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="d-flex flex-column">
+                    <span class="fs-5">Voucher 3</span>
+                    <span class="fs-6">
+                      5% discount on a cart value over 40€
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-primary btn-sm">Apply</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+          <td colspan="2">
+            <h3>Total €{{ this.cart.total }}</h3>
+          </td>
+        </tfoot>
       </table>
     </div>
   </div>
@@ -93,22 +150,22 @@ export default {
       },
       products: [
         {
-          id: 18,
-          name: 'Familial Love: White Lilies and Gerberas',
+          id: 1,
+          name: 'White Lilies (Product A)',
           price: 10,
           image:
             'https://d1mxm3s28igxxe.cloudfront.net/480x480/5cdd463408a93217111334.png',
         },
         {
-          id: 19,
-          name: 'Natural Poetry: Lilies and Roses',
+          id: 2,
+          name: 'Lilies and Roses (Product B)',
           price: 8,
           image:
             'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d84d413616d7421246578.png',
         },
         {
-          id: 20,
-          name: 'Sincere Smile: Pink Roses and Gerberas',
+          id: 3,
+          name: 'Pink Roses (Product C)',
           price: 12,
           image:
             'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d88ba27a40fa820506277.png',
@@ -117,6 +174,15 @@ export default {
     }
   },
   name: 'Home',
+  mounted() {
+    let storageCart = JSON.parse(localStorage.getItem('cart'))
+    if (storageCart !== null) {
+      this.cart = storageCart
+    }
+  },
+  updated() {
+    window.addEventListener('beforeunload', this.updateLocalStorage)
+  },
   methods: {
     addClass(e) {
       if (!e.target.classList.contains('shadow')) {
@@ -129,7 +195,6 @@ export default {
       }
     },
     addToCart(product) {
-      console.log('id before:' + this.cart)
       var valObj = this.cart.products.find(function (elem, index) {
         return elem.product.id == product.id
       })
@@ -142,8 +207,8 @@ export default {
         let indexOfId = this.cart.products.indexOf(valObj)
         this.cart.products[indexOfId].quantity++
       }
-
-      console.log(this.cart.products)
+      this.cart.total += product.price
+      this.updateLocalStorage()
     },
     removeFromCart(productId) {
       var valObj = this.cart.products.find(function (elem, index) {
@@ -154,12 +219,27 @@ export default {
       } else {
         let indexOfId = this.cart.products.indexOf(valObj)
         this.cart.products.splice(indexOfId, 1)
-        // if (this.cart.products[indexOfId].quantity > 1) {
-        //   this.cart.products[indexOfId].quantity--
-        // } else {
-        //   this.cart.products.splice(indexOfId, 1)
-        // }
+        this.cart.total -= valObj.product.price * valObj.quantity
       }
+      this.updateLocalStorage()
+    },
+    removeFromCartQuantity(productId) {
+      var valObj = this.cart.products.find(function (elem, index) {
+        return elem.product.id == productId
+      })
+      if (valObj != undefined) {
+        let indexOfId = this.cart.products.indexOf(valObj)
+        if (this.cart.products[indexOfId].quantity > 1) {
+          this.cart.products[indexOfId].quantity--
+        } else {
+          this.cart.products.splice(indexOfId, 1)
+        }
+        this.cart.total -= valObj.product.price
+      }
+      this.updateLocalStorage()
+    },
+    updateLocalStorage() {
+      localStorage.setItem('cart', JSON.stringify(this.cart))
     },
   },
 }
