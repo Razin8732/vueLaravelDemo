@@ -2,6 +2,16 @@
   <div class="container-fluid">
     <div class="row mt-3">
       <div class="col-md-12">
+        <span class="fs-3">Bouquets</span>
+        <button
+          class="btn btn-primary float-end"
+          data-bs-toggle="modal"
+          data-bs-target="#addBouquetModal"
+        >
+          Add New Bouquets
+        </button>
+      </div>
+      <div class="col-md-12">
         <div class="row justify-content-center">
           <div class="col-md-12 p-3" v-if="this.bouquets.length == 0">
             <div class="alert alert-info text-center">
@@ -91,6 +101,8 @@
         </div>
       </div>
     </div>
+
+    <AddBouquetComponent />
   </div>
 </template>
 <style>
@@ -104,8 +116,11 @@
 import Layout from './App'
 import { Inertia } from '@inertiajs/inertia'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import AddBouquetComponent from '../components/AddBouquetComponent.vue'
 export default {
-  components: {},
+  components: {
+    AddBouquetComponent,
+  },
   layout: Layout,
   name: 'Bouquets',
   props: {
@@ -161,9 +176,9 @@ export default {
                 Inertia.reload({
                   preserveState: false,
                 })
-                Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+                Swal.fire('Deleted!', response.data.msg, 'success')
               } else {
-                Swal.fire('Error!', 'Something went wrong.', 'error')
+                Swal.fire('Error!', response.data.msg, 'error')
               }
             })
             .catch((error) => {

@@ -17,11 +17,16 @@ trait BouquetsTrait
 
     public function getBouquets($id = '')
     {
-        return Http::get($this->url . $this->uri . $id)->json();
+        return array_reverse(Http::get($this->url . $this->uri . $id)->json());
     }
 
     public function deleteBouquet($id)
     {
         return Http::delete($this->url . $this->uri . $id);
+    }
+
+    public function createBouquet($data)
+    {
+        return Http::post($this->url . $this->uri, $data);
     }
 }

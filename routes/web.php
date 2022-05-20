@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BouquetController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/bouquets', [HomeController::class, 'bouquets'])->name('bouquets');
-Route::get('bouquets/{bouquetId}', [HomeController::class, 'get'])->name('getBouquets');
-Route::delete('bouquets/{bouquetId}', [HomeController::class, 'delete'])->name('deleteBouquets');
+Route::get('/bouquets', [BouquetController::class, 'index'])->name('bouquets.index');
+Route::get('bouquets/{bouquetId}', [BouquetController::class, 'show'])->name('bouquets.show');
+Route::post('/bouquets', [BouquetController::class, 'store'])->name('bouquets.store');
+Route::delete('bouquets/{bouquetId}', [BouquetController::class, 'delete'])->name('bouquets.delete');
