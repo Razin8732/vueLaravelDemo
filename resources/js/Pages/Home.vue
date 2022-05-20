@@ -1,23 +1,21 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
-            <Link href="/demo2">Demo2</Link>
-        </div>
-      <!-- <div class="col-md-3" v-for="product in this.products" :key="product.index">
+      <div class="col-md-3" v-for="product in this.products" :key="product.index">
         {{ product.name }} ==> {{ product.price }}
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { Link } from '@inertiajs/inertia-vue'
-
+import Layout from './App'
 export default {
   components: {
     Link,
   },
+  layout: Layout,
   data() {
     return {
       products: [

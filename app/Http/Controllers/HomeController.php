@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\ApiTrait;
+use App\Traits\BouquetsTrait;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-
 class HomeController extends Controller
 {
+    use BouquetsTrait;
     /**
      * Show the application dashboard.
      *
@@ -19,8 +21,9 @@ class HomeController extends Controller
         return Inertia::render('Home', [
             'event' => [
                 'title' => 'Welcome to Inertia!',
-                'description' => 'This is a simple example of a component rendered on the server side.',
-            ]
+                'description' =>
+                    'This is a simple example of a component rendered on the server side.',
+            ],
         ]);
     }
 
@@ -30,12 +33,9 @@ class HomeController extends Controller
      */
     public function demo2()
     {
-        // return view('home');
+        $bouquets = $this->getBouquets();
         return Inertia::render('Demo2', [
-            'event' => [
-                'title' => 'Welcome to Inertia!',
-                'description' => 'This is a simple example of a component rendered on the server side.',
-            ]
+            'bouquets' => $bouquets,
         ]);
     }
 }
