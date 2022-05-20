@@ -7624,17 +7624,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      bouquet: Object,
-      products: [{
-        name: 'Product 1',
-        price: '$10'
-      }, {
-        name: 'Product 2',
-        price: '$20'
-      }, {
-        name: 'Product 3',
-        price: '$30'
-      }]
+      bouquet: Object // this will be used while viewing a bouquet (fetched from api)
+
     };
   },
   methods: {
@@ -7720,6 +7711,75 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7729,21 +7789,74 @@ __webpack_require__.r(__webpack_exports__);
   layout: _App__WEBPACK_IMPORTED_MODULE_1__["default"],
   data: function data() {
     return {
+      cart: {
+        products: [],
+        total: 0
+      },
       products: [{
-        name: 'Product 1',
-        price: '$10'
+        id: 18,
+        name: 'Familial Love: White Lilies and Gerberas',
+        price: 10,
+        image: 'https://d1mxm3s28igxxe.cloudfront.net/480x480/5cdd463408a93217111334.png'
       }, {
-        name: 'Product 2',
-        price: '$20'
+        id: 19,
+        name: 'Natural Poetry: Lilies and Roses',
+        price: 8,
+        image: 'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d84d413616d7421246578.png'
       }, {
-        name: 'Product 3',
-        price: '$30'
+        id: 20,
+        name: 'Sincere Smile: Pink Roses and Gerberas',
+        price: 12,
+        image: 'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d88ba27a40fa820506277.png'
       }]
     };
   },
   name: 'Home',
-  mounted: function mounted() {
-    console.log('Component mounted.');
+  methods: {
+    addClass: function addClass(e) {
+      if (!e.target.classList.contains('shadow')) {
+        e.target.classList.add('shadow');
+      }
+    },
+    removeClass: function removeClass(e) {
+      if (e.target.classList.contains('shadow')) {
+        e.target.classList.remove('shadow');
+      }
+    },
+    addToCart: function addToCart(product) {
+      console.log('id before:' + this.cart);
+      var valObj = this.cart.products.find(function (elem, index) {
+        return elem.product.id == product.id;
+      });
+
+      if (valObj == undefined) {
+        this.cart.products.push({
+          product: product,
+          quantity: 1
+        });
+      } else {
+        var indexOfId = this.cart.products.indexOf(valObj);
+        this.cart.products[indexOfId].quantity++;
+      }
+
+      console.log(this.cart.products);
+    },
+    removeFromCart: function removeFromCart(productId) {
+      var valObj = this.cart.products.find(function (elem, index) {
+        return elem.product.id == productId;
+      });
+
+      if (valObj == undefined) {
+        return;
+      } else {
+        var indexOfId = this.cart.products.indexOf(valObj);
+        this.cart.products.splice(indexOfId, 1); // if (this.cart.products[indexOfId].quantity > 1) {
+        //   this.cart.products[indexOfId].quantity--
+        // } else {
+        //   this.cart.products.splice(indexOfId, 1)
+        // }
+      }
+    }
   }
 });
 
@@ -52378,23 +52491,163 @@ var render = function () {
   return _c("div", { staticClass: "container-fluid" }, [
     _c(
       "div",
-      { staticClass: "row" },
-      _vm._l(this.products, function (product) {
-        return _c("div", { key: product.index, staticClass: "col-md-3" }, [
-          _vm._v(
-            "\n      " +
-              _vm._s(product.name) +
-              " ==> " +
-              _vm._s(product.price) +
-              "\n    "
-          ),
-        ])
-      }),
-      0
+      { staticClass: "container-fluid p-2 border-bottom rounded mt-2" },
+      [
+        _c("h1", [_vm._v("Products")]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row" },
+          _vm._l(this.products, function (product) {
+            return _c(
+              "div",
+              { key: product.index, staticClass: "col-md-4 p-3" },
+              [
+                _c(
+                  "div",
+                  {
+                    staticClass: "border text-center rounded bouquets p-3",
+                    on: {
+                      mouseenter: _vm.addClass,
+                      mouseleave: _vm.removeClass,
+                    },
+                  },
+                  [
+                    _c("div", { staticClass: "border-bottom mb-2 pb-2" }, [
+                      _c("img", {
+                        staticClass: "w-75 img-fluid",
+                        attrs: { src: product.image },
+                      }),
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "text-start",
+                        staticStyle: { "z-index": "3", position: "relative" },
+                      },
+                      [
+                        _c("h3", { staticClass: "text-truncate" }, [
+                          _vm._v(_vm._s(product.name)),
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary btn-sm float-end",
+                            on: {
+                              click: function ($event) {
+                                return _vm.addToCart(product)
+                              },
+                            },
+                          },
+                          [_vm._v("\n              Add To Cart\n            ")]
+                        ),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "fs-4 fw-normal" }, [
+                          _vm._v("€" + _vm._s(product.price)),
+                        ]),
+                      ]
+                    ),
+                  ]
+                ),
+              ]
+            )
+          }),
+          0
+        ),
+      ]
     ),
+    _vm._v(" "),
+    this.cart.products.length > 0
+      ? _c(
+          "div",
+          { staticClass: "container-fluid p-2 border-bottom rounded mt-2" },
+          [
+            _c("h1", [_vm._v("Cart")]),
+            _vm._v(" "),
+            _c("table", { staticClass: "table table-primary" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(this.cart.products, function (item) {
+                  return _c("tr", { key: item.id }, [
+                    _c("td", [_c("h3", [_vm._v(_vm._s(item.product.name))])]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { width: "10%" } }, [
+                      _c("span", { staticClass: "fs-4 fw-normal" }, [
+                        _vm._v("€" + _vm._s(item.product.price)),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { width: "10%" } }, [
+                      _c("span", { staticClass: "fs-4 fw-normal" }, [
+                        _vm._v(
+                          "\n              €" +
+                            _vm._s(
+                              parseInt(item.quantity) *
+                                parseInt(item.product.price)
+                            ) +
+                            "\n            "
+                        ),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { width: "10%" } }, [
+                      _c("div", [
+                        _c("button", {
+                          staticClass: "btn btn-primary btn-sm rounded",
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "fs-4 fw-normal" }, [
+                          _vm._v(_vm._s(item.quantity)),
+                        ]),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("td", { staticStyle: { width: "10%" } }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger btn-sm float-end",
+                          on: {
+                            click: function ($event) {
+                              return _vm.removeFromCart(item.product.id)
+                            },
+                          },
+                        },
+                        [_vm._v("\n              Remove\n            ")]
+                      ),
+                    ]),
+                  ])
+                }),
+                0
+              ),
+            ]),
+          ]
+        )
+      : _vm._e(),
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("th", [_vm._v("Item")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Price")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Total")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Quantity")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Add or Remove")]),
+    ])
+  },
+]
 render._withStripped = true
 
 

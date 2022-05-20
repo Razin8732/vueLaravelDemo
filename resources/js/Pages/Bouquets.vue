@@ -113,21 +113,7 @@ export default {
   },
   data() {
     return {
-      bouquet: Object,
-      products: [
-        {
-          name: 'Product 1',
-          price: '$10',
-        },
-        {
-          name: 'Product 2',
-          price: '$20',
-        },
-        {
-          name: 'Product 3',
-          price: '$30',
-        },
-      ],
+      bouquet: Object, // this will be used while viewing a bouquet (fetched from api)
     }
   },
   methods: {
