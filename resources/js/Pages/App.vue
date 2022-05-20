@@ -13,7 +13,7 @@
             <Link class="nav-link" href="/">Home</Link>
           </li>
           <li class="nav-item">
-            <Link class="nav-link" href="/demo2">Demo2</Link>
+            <Link class="nav-link" href="/bouquets">Bouquets</Link>
           </li>
         </ul>
       </div>
@@ -22,18 +22,6 @@
     <div class="container-fluid">
       <slot />
     </div>
-
-    <div class="box" id="loader" style="display: none;">
-      <div class="loader-11"></div>
-    </div>
-    <!-- <div class="loader-container" id="loader" style="display: none;">
-      <div class="loader">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div> -->
   </main>
 </template>
 
@@ -44,7 +32,5 @@ export default {
   components: {
     Link,
   },
-  methods: {},
-  created() {},
 }
 </script>

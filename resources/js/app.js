@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+window.$ = window.jQuery = require('jquery');
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -37,9 +38,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 import Vue from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue'
 import { InertiaProgress } from '@inertiajs/progress'
-
-
 InertiaProgress.init()
+
+
 
 createInertiaApp({
     resolve: name => require(`./Pages/${name}`),

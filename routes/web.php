@@ -14,8 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/demo2', [HomeController::class, 'demo2'])->name('demo2');
+Route::get('/bouquets', [HomeController::class, 'bouquets'])->name('bouquets');
+Route::get('bouquets/{bouquetId}', [HomeController::class, 'get'])->name('getBouquets');
+Route::delete('bouquets/{bouquetId}', [HomeController::class, 'delete'])->name('deleteBouquets');
