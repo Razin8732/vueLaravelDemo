@@ -7904,36 +7904,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -8011,7 +7981,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addToCart: function addToCart(product) {
-      // console.log('add to cart');
       var valObj = this.cart.products.find(function (elem, index) {
         return elem.product.id == product.id;
       });
@@ -8415,7 +8384,11 @@ __webpack_require__.r(__webpack_exports__);
             preserveState: false
           });
           sweetalert2_dist_sweetalert2_js__WEBPACK_IMPORTED_MODULE_0___default().fire('Created!', response.data.msg, 'success');
-          _this.bouquet = '';
+          _this.bouquet = {
+            name: '',
+            price: '',
+            image: ''
+          };
           _this.errors = [];
         } else {
           sweetalert2_dist_sweetalert2_js__WEBPACK_IMPORTED_MODULE_0___default().fire('Error!', response.data.msg, 'error');
@@ -53150,8 +53123,14 @@ var render = function () {
                             _vm._v(" "),
                             _c("span", { staticClass: "fs-4 fw-normal" }, [
                               _vm._v(
-                                "\n                " +
-                                  _vm._s(bouquet.price.split(".")[0]) +
+                                "\n                €" +
+                                  _vm._s(
+                                    bouquet.price.split(".")[0].includes("€")
+                                      ? bouquet.price
+                                          .split(".")[0]
+                                          .split("€")[1]
+                                      : bouquet.price.split(".")[0]
+                                  ) +
                                   "\n                "
                               ),
                               _c("sup", [
@@ -53501,7 +53480,7 @@ var render = function () {
                     "td",
                     {
                       staticClass: "p-3",
-                      attrs: { colspan: "2", rowspan: "3" },
+                      attrs: { colspan: "3", rowspan: "3" },
                     },
                     [
                       _c("span", { staticClass: "fs-5 fw-bold" }, [

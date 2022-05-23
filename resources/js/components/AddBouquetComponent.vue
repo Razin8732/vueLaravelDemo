@@ -185,7 +185,11 @@ export default {
               preserveState: false,
             })
             Swal.fire('Created!', response.data.msg, 'success')
-            this.bouquet = ''
+            this.bouquet = {
+                name: '',
+                price: '',
+                image: '',
+              };
             this.errors = []
           } else {
             Swal.fire('Error!', response.data.msg, 'error')

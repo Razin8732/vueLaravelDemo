@@ -3,25 +3,14 @@
     <div class="container-fluid p-2 border-bottom rounded mt-2" style="">
       <h1>Products</h1>
       <div class="row">
-        <div
-          class="col-md-4 p-3"
-          v-for="product in this.products"
-          :key="product.index"
-        >
-          <div
-            class="border text-center rounded bouquets p-3"
-            @mouseenter="addClass"
-            @mouseleave="removeClass"
-          >
+        <div class="col-md-4 p-3" v-for="product in this.products" :key="product.index">
+          <div class="border text-center rounded bouquets p-3" @mouseenter="addClass" @mouseleave="removeClass">
             <div class="border-bottom mb-2 pb-2">
               <img :src="product.image" class="w-75 img-fluid" />
             </div>
             <div class="text-start" style="z-index: 3; position: relative;">
               <h3 class="text-truncate">{{ product.name }}</h3>
-              <button
-                class="btn btn-primary btn-sm float-end"
-                @click="addToCart(product)"
-              >
+              <button class="btn btn-primary btn-sm float-end" @click="addToCart(product)">
                 Add To Cart
               </button>
               <span class="fs-4 fw-normal">€{{ product.price }}</span>
@@ -30,11 +19,8 @@
         </div>
       </div>
     </div>
-    <div
-      class="container-fluid p-2 border-bottom rounded mt-2"
-      v-if="this.cart.products.length > 0"
-      style="height: 100vh !important;"
-    >
+    <div class="container-fluid p-2 border-bottom rounded mt-2" v-if="this.cart.products.length > 0"
+      style="height: 100vh !important;">
       <h1>Cart</h1>
       <table class="table table-striped">
         <thead>
@@ -59,26 +45,17 @@
             </td>
             <td class="" style="width: 10%;">
               <div class="d-flex flex-row justify-content-around">
-                <button
-                  class="btn btn-primary btn-sm rounded"
-                  @click="addToCart(item.product)"
-                >
+                <button class="btn btn-primary btn-sm rounded" @click="addToCart(item.product)">
                   <i class="fa fa-plus"></i>
                 </button>
                 <span class="fs-4 fw-normal">{{ item.quantity }}</span>
-                <button
-                  class="btn btn-danger btn-sm rounded"
-                  @click="removeFromCartQuantity(item.product.id)"
-                >
+                <button class="btn btn-danger btn-sm rounded" @click="removeFromCartQuantity(item.product.id)">
                   <i class="fa fa-minus"></i>
                 </button>
               </div>
             </td>
             <td class="" style="width: 10%;">
-              <button
-                class="btn btn-danger btn-sm float-end"
-                @click="removeFromCart(item.product.id)"
-              >
+              <button class="btn btn-danger btn-sm float-end" @click="removeFromCart(item.product.id)">
                 Remove
               </button>
             </td>
@@ -86,14 +63,10 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="2" rowspan="3" class="p-3">
+            <td colspan="3" rowspan="3" class="p-3">
               <span class="fs-5 fw-bold">
                 Apply Voucher
-                <button
-                  class="btn btn-sm btn-danger"
-                  v-if="this.cart.voucherApplied.id != ''"
-                  @click="removeVoucher()"
-                >
+                <button class="btn btn-sm btn-danger" v-if="this.cart.voucherApplied.id != ''" @click="removeVoucher()">
                   Remove Voucher
                 </button>
               </span>
@@ -107,10 +80,7 @@
                       </span>
                     </td>
                     <td>
-                      <button
-                        class="btn btn-primary btn-sm"
-                        @click="applyVoucher(voucher.id)"
-                      >
+                      <button class="btn btn-primary btn-sm" @click="applyVoucher(voucher.id)">
                         Apply
                       </button>
                     </td>
