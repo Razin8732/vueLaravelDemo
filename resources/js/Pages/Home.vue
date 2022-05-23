@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="container-fluid p-2 border-bottom rounded mt-2">
+    <div class="container-fluid p-2 border-bottom rounded mt-2" style="">
       <h1>Products</h1>
       <div class="row">
         <div
@@ -33,6 +33,7 @@
     <div
       class="container-fluid p-2 border-bottom rounded mt-2"
       v-if="this.cart.products.length > 0"
+      style="height: 100vh !important;"
     >
       <h1>Cart</h1>
       <table class="table table-striped">
@@ -84,59 +85,71 @@
           </tr>
         </tbody>
         <tfoot>
-          <td colspan="3" class="p-3">
-            <span class="fs-5 fw-bold">Apply Voucher</span>
-            <table class="table w-50">
-              <tbody>
-                <tr>
-                  <td class="d-flex flex-column">
-                    <span class="fs-5">Voucher 1</span>
-                    <span class="fs-6">
-                      10% off discount voucher for the second unit applying only
-                      to Product A
-                    </span>
-                  </td>
-                  <td>
-                    <button class="btn btn-primary btn-sm">Apply</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="d-flex flex-column">
-                    <span class="fs-5">Voucher 2</span>
-                    <span class="fs-6">
-                      5€ off discount on product type B
-                    </span>
-                  </td>
-                  <td>
-                    <button class="btn btn-primary btn-sm">Apply</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="d-flex flex-column">
-                    <span class="fs-5">Voucher 3</span>
-                    <span class="fs-6">
-                      5% discount on a cart value over 40€
-                    </span>
-                  </td>
-                  <td>
-                    <button class="btn btn-primary btn-sm">Apply</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </td>
-          <td colspan="2">
-            <h3>Total €{{ this.cart.total }}</h3>
-          </td>
+          <tr>
+            <td colspan="2" rowspan="3" class="p-3">
+              <span class="fs-5 fw-bold">
+                Apply Voucher
+                <button
+                  class="btn btn-sm btn-danger"
+                  v-if="this.cart.voucherApplied.id != ''"
+                  @click="removeVoucher()"
+                >
+                  Remove Voucher
+                </button>
+              </span>
+              <table class="table w-50 voucherTable">
+                <tbody>
+                  <tr v-for="voucher in this.vouchers" :key="voucher.id">
+                    <td class="d-flex flex-column">
+                      <span class="fs-5">{{ voucher.name }}</span>
+                      <span class="fs-6">
+                        {{ voucher.description }}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-primary btn-sm"
+                        @click="applyVoucher(voucher.id)"
+                      >
+                        Apply
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td class="fs-4 text-end">Total</td>
+            <td class="fs-4">€{{ this.cart.total }}</td>
+          </tr>
+          <tr>
+            <td class="fs-4 text-end">Discount</td>
+            <td class="fs-4 d-flex align-items-center">
+              €{{ this.cart.discount }}
+              <span class="fs-6" v-if="this.cart.voucherApplied.name != ''">
+                ({{ this.cart.voucherApplied.name }})
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="fs-4 text-end">Grand Total</td>
+            <td class="fs-4">€{{ this.cart.grandTotal }}</td>
+          </tr>
         </tfoot>
       </table>
     </div>
   </div>
 </template>
-
+<style scoped>
+.voucherTable {
+  max-height: 100px;
+  overflow-y: scroll;
+  display: block;
+}
+</style>
 <script>
 import { Link } from '@inertiajs/inertia-vue'
 import Layout from './App'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 export default {
   components: {
     Link,
@@ -147,6 +160,12 @@ export default {
       cart: {
         products: [],
         total: 0,
+        voucherApplied: {
+          id: '',
+          name: '',
+        },
+        grandTotal: 0,
+        discount: 0,
       },
       products: [
         {
@@ -169,6 +188,27 @@ export default {
           price: 12,
           image:
             'https://d1mxm3s28igxxe.cloudfront.net/480x480/5d88ba27a40fa820506277.png',
+        },
+      ],
+      vouchers: [
+        {
+          id: 1,
+          name: 'Voucher V',
+          description:
+            '10% off discount voucher for the second unit applying only to product A',
+          condition: ['productID == 2'],
+        },
+        {
+          id: 2,
+          name: 'Voucher R',
+          description: '5€ off discount on product B',
+          condition: ['productID == 2'],
+        },
+        {
+          id: 3,
+          name: 'Voucher S',
+          description: '5% discount on a cart value over 40€',
+          condition: ['cartTotal > 40 '],
         },
       ],
     }
@@ -234,12 +274,141 @@ export default {
         } else {
           this.cart.products.splice(indexOfId, 1)
         }
-        this.cart.total -= valObj.product.price
+        if (this.cart.total > 0) {
+          this.cart.total -= valObj.product.price
+        }
       }
       this.updateLocalStorage()
     },
     updateLocalStorage() {
       localStorage.setItem('cart', JSON.stringify(this.cart))
+      this.checkVoucherValidity()
+    },
+    applyVoucher(voucherId, showMsg = true) {
+      this.$parent.isLoading(true)
+      let success = false
+      let msg = ''
+      switch (voucherId) {
+        case 1:
+          success = false
+          msg =
+            'You need to buy at least 2 units of ' +
+            this.products[0].name +
+            ' to apply this voucher'
+          let productID = 1
+          let valObj = this.cart.products.find(function (elem, index) {
+            return elem.product.id == productID
+          })
+          if (valObj != undefined) {
+            let indexOf = this.cart.products.indexOf(valObj)
+            if (indexOf > -1) {
+              let productData = this.cart.products[indexOf]
+              if (productData.quantity >= 2) {
+                this.cart.voucherApplied.id = voucherId
+                this.cart.discount =
+                  productData.quantity * productData.product.price * 0.1
+                this.cart.grandTotal = this.cart.total - this.cart.discount
+                success = true
+                msg = 'Voucher applied'
+              }
+            }
+          }
+          break
+        case 2:
+          success = false
+          msg =
+            'You need to buy at least 1 units of ' +
+            this.products[1].name +
+            ' to apply this voucher'
+          productID = 2
+          valObj = this.cart.products.find(function (elem, index) {
+            return elem.product.id == productID
+          })
+          if (valObj != undefined) {
+            let indexOf = this.cart.products.indexOf(valObj)
+            if (indexOf > -1) {
+              let productData = this.cart.products[indexOf]
+              this.cart.voucherApplied.id = voucherId
+              this.cart.discount = 5
+              this.cart.grandTotal = this.cart.total - this.cart.discount
+              success = true
+              msg = 'Voucher applied'
+            }
+          }
+          break
+        case 3:
+          success = false
+          msg =
+            'You need to buy at least €40 worth of products to apply this voucher'
+
+          if (this.cart.total >= 40) {
+            this.cart.voucherApplied.id = voucherId
+            this.cart.discount = (this.cart.total * 5) / 100
+            this.cart.grandTotal = this.cart.total - this.cart.discount
+            success = true
+            msg = 'Voucher applied'
+          }
+          break
+      }
+      let valObj = this.vouchers.find(function (elem, index) {
+        return elem.id == voucherId
+      })
+      if (valObj != undefined) {
+        let indexOf = this.vouchers.indexOf(valObj)
+        this.cart.voucherApplied.name = this.vouchers[indexOf].name
+      }
+
+      if (showMsg) {
+        let messageTitle = 'Voucher apply '
+        messageTitle += success ? 'successful' : 'unsuccessful'
+        Swal.fire({
+          icon: success == true ? 'success' : 'error',
+          title: messageTitle,
+          text: msg,
+          confirmButtonText: 'OK',
+        })
+      }
+      setTimeout(() => {
+        this.$parent.isLoading(false)
+      }, 500)
+      return success
+    },
+    removeVoucher(msgTitle = 'success', msgText = 'Voucher removed') {
+      this.cart.voucherApplied.id = ''
+      this.cart.voucherApplied.name = ''
+      this.cart.discount = 0
+      this.cart.grandTotal = this.cart.total
+      Swal.fire({
+        icon: 'success',
+        title: msgTitle,
+        text: msgText,
+        confirmButtonText: 'OK',
+      })
+    },
+    checkVoucherValidity() {
+      let voucherApplied = this.cart.voucherApplied.id
+      if (voucherApplied != '') {
+        let result = this.applyVoucher(voucherApplied, false)
+        if (!result) {
+          let valObj = this.vouchers.find(function (elem, index) {
+            return elem.id == voucherApplied
+          })
+          if (valObj != undefined) {
+            let indexOf = this.vouchers.indexOf(valObj)
+            if (indexOf > -1) {
+              this.removeVoucher(
+                'Voucher removed',
+                this.vouchers[indexOf].name + ' criteria not met',
+              )
+            }
+          }
+
+          // fallback condition if something went wrong with the voucher
+          if (this.cart.voucherApplied.id != '') {
+            this.removeVoucher()
+          }
+        }
+      }
     },
   },
 }
