@@ -8011,6 +8011,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addToCart: function addToCart(product) {
+      // console.log('add to cart');
       var valObj = this.cart.products.find(function (elem, index) {
         return elem.product.id == product.id;
       });

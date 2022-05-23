@@ -3,7 +3,7 @@ version: '3'
 services:
     laravel.test:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.1
+            context: ./docker/8.1
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -44,15 +44,6 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
             timeout: 5s
-    frontend:
-        image: node:current-alpine
-        user: ${UID}:${UID}
-        working_dir: /var/www/html
-        volumes:
-            - ./:/var/www/html
-        environment:
-            NODE_ENV: development
-        command: "npm run serve"
 networks:
     sail:
         driver: bridge
