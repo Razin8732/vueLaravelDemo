@@ -86,7 +86,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="2" rowspan="3" class="p-3">
+            <td colspan="3" rowspan="3" class="p-3">
               <span class="fs-5 fw-bold">
                 Apply Voucher
                 <button
@@ -215,10 +215,10 @@ export default {
   },
   name: 'Home',
   mounted() {
-    let storageCart = JSON.parse(localStorage.getItem('cart'))
-    if (storageCart !== null) {
-      this.cart = storageCart
-    }
+    // let storageCart = JSON.parse(localStorage.getItem('cart'))
+    // if (storageCart !== null) {
+    //   this.cart = storageCart
+    // }
   },
   updated() {
     window.addEventListener('beforeunload', this.updateLocalStorage)
@@ -281,7 +281,7 @@ export default {
       this.updateLocalStorage()
     },
     updateLocalStorage() {
-      localStorage.setItem('cart', JSON.stringify(this.cart))
+      //   localStorage.setItem('cart', JSON.stringify(this.cart))
       this.checkVoucherValidity()
     },
     applyVoucher(voucherId, showMsg = true) {
@@ -305,8 +305,7 @@ export default {
               let productData = this.cart.products[indexOf]
               if (productData.quantity >= 2) {
                 this.cart.voucherApplied.id = voucherId
-                this.cart.discount =
-                  productData.quantity * productData.product.price * 0.1
+                this.cart.discount = productData.product.price * 0.1
                 this.cart.grandTotal = this.cart.total - this.cart.discount
                 success = true
                 msg = 'Voucher applied'
@@ -329,7 +328,7 @@ export default {
             if (indexOf > -1) {
               let productData = this.cart.products[indexOf]
               this.cart.voucherApplied.id = voucherId
-              this.cart.discount = 5
+              this.cart.discount = productData.quantity * 5
               this.cart.grandTotal = this.cart.total - this.cart.discount
               success = true
               msg = 'Voucher applied'
@@ -408,6 +407,8 @@ export default {
             this.removeVoucher()
           }
         }
+      }else{
+          this.cart.grandTotal = this.cart.total
       }
     },
   },

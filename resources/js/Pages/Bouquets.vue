@@ -40,7 +40,7 @@
                   <h3 class="text-truncate">{{ bouquet.name }}</h3>
                 </a>
                 <span class="fs-4 fw-normal">
-                  {{ bouquet.price.split('.')[0] }}
+                  €{{ (bouquet.price.split('.')[0].includes('€')) ? bouquet.price.split('.')[0].split('€')[1] : bouquet.price.split('.')[0] }}
                   <sup>{{ bouquet.price.split('.')[1] }}</sup>
                 </span>
               </div>

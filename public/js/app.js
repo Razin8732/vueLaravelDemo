@@ -7989,12 +7989,10 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   name: 'Home',
-  mounted: function mounted() {
-    var storageCart = JSON.parse(localStorage.getItem('cart'));
-
-    if (storageCart !== null) {
-      this.cart = storageCart;
-    }
+  mounted: function mounted() {// let storageCart = JSON.parse(localStorage.getItem('cart'))
+    // if (storageCart !== null) {
+    //   this.cart = storageCart
+    // }
   },
   updated: function updated() {
     window.addEventListener('beforeunload', this.updateLocalStorage);
@@ -8011,7 +8009,6 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addToCart: function addToCart(product) {
-      // console.log('add to cart');
       var valObj = this.cart.products.find(function (elem, index) {
         return elem.product.id == product.id;
       });
@@ -8066,7 +8063,7 @@ __webpack_require__.r(__webpack_exports__);
       this.updateLocalStorage();
     },
     updateLocalStorage: function updateLocalStorage() {
-      localStorage.setItem('cart', JSON.stringify(this.cart));
+      //   localStorage.setItem('cart', JSON.stringify(this.cart))
       this.checkVoucherValidity();
     },
     applyVoucher: function applyVoucher(voucherId) {
@@ -8095,7 +8092,7 @@ __webpack_require__.r(__webpack_exports__);
 
               if (productData.quantity >= 2) {
                 this.cart.voucherApplied.id = voucherId;
-                this.cart.discount = productData.quantity * productData.product.price * 0.1;
+                this.cart.discount = productData.product.price * 0.1;
                 this.cart.grandTotal = this.cart.total - this.cart.discount;
                 success = true;
                 msg = 'Voucher applied';
@@ -8119,7 +8116,7 @@ __webpack_require__.r(__webpack_exports__);
             if (_indexOf > -1) {
               var _productData = this.cart.products[_indexOf];
               this.cart.voucherApplied.id = voucherId;
-              this.cart.discount = 5;
+              this.cart.discount = _productData.quantity * 5;
               this.cart.grandTotal = this.cart.total - this.cart.discount;
               success = true;
               msg = 'Voucher applied';
@@ -8207,6 +8204,8 @@ __webpack_require__.r(__webpack_exports__);
             this.removeVoucher();
           }
         }
+      } else {
+        this.cart.grandTotal = this.cart.total;
       }
     }
   }
@@ -8415,7 +8414,11 @@ __webpack_require__.r(__webpack_exports__);
             preserveState: false
           });
           sweetalert2_dist_sweetalert2_js__WEBPACK_IMPORTED_MODULE_0___default().fire('Created!', response.data.msg, 'success');
-          _this.bouquet = '';
+          _this.bouquet = {
+            name: '',
+            price: '',
+            image: ''
+          };
           _this.errors = [];
         } else {
           sweetalert2_dist_sweetalert2_js__WEBPACK_IMPORTED_MODULE_0___default().fire('Error!', response.data.msg, 'error');
@@ -53150,8 +53153,14 @@ var render = function () {
                             _vm._v(" "),
                             _c("span", { staticClass: "fs-4 fw-normal" }, [
                               _vm._v(
-                                "\n                " +
-                                  _vm._s(bouquet.price.split(".")[0]) +
+                                "\n                €" +
+                                  _vm._s(
+                                    bouquet.price.split(".")[0].includes("€")
+                                      ? bouquet.price
+                                          .split(".")[0]
+                                          .split("€")[1]
+                                      : bouquet.price.split(".")[0]
+                                  ) +
                                   "\n                "
                               ),
                               _c("sup", [
@@ -53501,7 +53510,7 @@ var render = function () {
                     "td",
                     {
                       staticClass: "p-3",
-                      attrs: { colspan: "2", rowspan: "3" },
+                      attrs: { colspan: "3", rowspan: "3" },
                     },
                     [
                       _c("span", { staticClass: "fs-5 fw-bold" }, [

@@ -43,7 +43,7 @@ class BouquetController extends Controller
             'price' => ['required', 'numeric'],
             'image' => ['required', 'url', function ($attribute, $value, $fail) {
                 if (!(@getimagesize($value))) {
-                    $fail('The image url is not valid.');
+                    $fail('The url does not contain valid image file.');
                 }
             }],
         ]);
