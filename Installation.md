@@ -1,6 +1,6 @@
 ## Step 1 - Clone repository
 
-`git clone https://gitlab.com/tbdevgroup/floraqueen-demo.git`
+`git clone https://github.com/RazinTeqB/vueLaravelDemo.git`
 
 ## Step 2 - Change directory
 
@@ -16,7 +16,7 @@
 
 ## Step 5 - Login into docker ssh
 
-`docker exec -it floraqueen-demo_laravel.test_1 bash`
+`docker exec -it vuelaraveldemo_laravel.test_1 bash`
 
 ## Step 6 - Install composer dependencies
 
